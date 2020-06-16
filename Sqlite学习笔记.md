@@ -91,7 +91,7 @@ $ sqlite3 database_name.db
 
 创建数据表
 
-```
+```shell
 sqlite> create table table1(
     ID INT PRIMARY KEY NOT NULL,
     NAME TEXT NOT NULL,
@@ -113,3 +113,48 @@ sqlite> create table table1(
 | < (<=)(!>)  | 小于(小于等于)(小于等于)为真 |
 | \> (>=)(!<) | 大于(大于等于)(大于等于)为真 |
 
+## python操作sqlite
+
+**连接数据库**
+
+```python
+import sqlite3
+conn = sqlite3.connect('test.db')
+# save the changes
+conn.commit()
+#-------不需要时关闭游标-----
+# close the connection with the database
+conn.close()
+```
+
+**执行sqlite命令**(直接将sqlite命令语句加入execute中执行)
+
+```python
+import sqlite3
+conn = sqlite3.connect('test.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE COMPANY
+       (ID INT PRIMARY KEY     NOT NULL,
+       NAME           TEXT    NOT NULL,
+       AGE            INT     NOT NULL,
+       ADDRESS        CHAR(50),
+       SALARY         REAL);''')
+#-------不需要时关闭游标-----
+conn.commit()  # 对内容产生影响才需要
+conn.close()
+```
+
+**获取执行后的结果**
+
+```python
+import sqlite3
+conn = sqlite3.connect('test.db')
+c = conn.cursor()
+cursor = c.execute("SELECT id, name, address, salary  from COMPANY")
+for row in cursor:
+   print "ID = ", row[0]
+   print "NAME = ", row[1]
+   print "ADDRESS = ", row[2]
+   print "SALARY = ", row[3], "\n"
+conn.close()
+```
