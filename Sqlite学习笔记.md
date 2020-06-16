@@ -158,3 +158,162 @@ for row in cursor:
    print "SALARY = ", row[3], "\n"
 conn.close()
 ```
+
+## C++操作sqlite
+
+安装sqlite3的lib库
+
+```shell
+$ apt-get install libsqlite3-dev
+```
+
+导入头文件
+
+```c++
+#include <sqlite3.h>
+```
+
+编译时需要加上链接库
+
+```shell
+$ g++ csqlite.cpp -lsqlite3 -o testsql
+```
+
+**接口API**
+
+| API                                                          | 用法及功能                                                   |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| sqlite3_open(const char *filename, sqlite3 **ppdb)           | 链接数据库，返回一个数据库连接对象．filename参数为数据库的文件名，当为NULL或':memory'时，则会在RAM中创建一个临时数据库，并只会在session的有效时间内持续．如果文件名不为上述两种，则打开数据库文件，数据库文件不存在则新建并打开． |
+| sqlite3_exec(sqlite3 *, const char *sql, sqlite_callback, void *data, char **errmsg) | 执行sqlite命令，第一个参数 *sqlite3* 是打开的数据库对象，*sqlite_callback* 是一个回调，*data* 作为其第一个参数，errmsg 将被返回用来获取程序生成的任何错误。 |
+| sqlite3_close(sqlite3 *)                                     | 关闭数据库连接                                               |
+
+**链接数据库**
+
+```c++
+#include <iostream>
+#include <sqlite3.h>
+
+int main(int argc, char* argv[])
+{
+   sqlite3 *db;  // 数据库指针
+   int rc;  // 标志值
+   rc = sqlite3_open("db.sqlite3", &db); // 成功返回０，否则返回-1
+   if( rc ){
+      std::cout << "Can't open database" << std::endl;
+   }else{
+      std::cout << "Opened database successfully" << std::endl;
+   }
+   sqlite3_close(db);
+}
+```
+
+**执行sqlite命令**
+
+```c++
+#include <iostream>
+#include <sqlite3.h>
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+  int i;
+  for(i=0; i<argc; i++){
+    std::cout << azColName[i] << "=" << argv[i] << std::endl;
+  }
+  return 0;
+}
+
+int main(int argc, char* argv[])
+{
+  sqlite3 *db;
+  char *zErrMsg = 0;
+  int  rc;
+  char *sql;
+
+  /* Open database */
+  rc = sqlite3_open("db.sqlite3", &db);
+  if( rc ){
+    std::cout<<"Can't open database"<<std::endl;
+    return 0;
+  }else{
+    std::cout<<"Opened database successfully"<<std::endl;
+  }
+
+  /* Create SQL statement */
+  sql = "select * from app_detectresult";
+
+  /* Execute SQL statement */
+  rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+  if( rc != SQLITE_OK ){
+    std::cout << "SQL error: "<< zErrMsg << std::endl;
+  }else{
+    std::cout << "Table created successfully" << std::endl;
+  }
+  sqlite3_close(db);
+  return 0;
+}
+```
+
+callback回调操作查询到的每一条数据！
+
+显示如下
+
+```shell
+Opened database successfully
+id=1
+timestamp=23456982435
+time=2020-06-10 13:23:05
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=2
+timestamp=23456982436
+time=2020-06-10 13:23:06
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=3
+timestamp=23456982437
+time=2020-06-10 13:23:07
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=4
+timestamp=23456982438
+time=2020-06-10 13:23:08
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=5
+timestamp=23456982439
+time=2020-06-10 13:23:09
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=6
+timestamp=298736234
+time=2020-06-10 15:06:24
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=7
+timestamp=298736234
+time=2020-06-10 15:06:24
+result=1
+numpass=1
+locatepass=1
+statupass=1
+id=8
+timestamp=23456982449
+time=2020-06-10 13:23:19
+result=1
+numpass=1
+locatepass=1
+statupass=1
+Table created successfully
+```
+
