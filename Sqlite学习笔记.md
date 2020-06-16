@@ -1,0 +1,115 @@
+## Sqlite学习笔记
+
+**1.Sqlite是什么**
+
+SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库一样，您不需要在系统中配置。
+
+就像其他数据库，SQLite 引擎不是一个独立的进程，可以按应用程序需求进行静态或动态连接。SQLite 直接访问其存储文件。
+
+**2.ubuntu1604下安装sqlite**
+
+1.先检查是否已安装
+
+```shell
+$ sqlite3
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> 
+```
+
+如果已安装sqlite会出现上述版本信息．
+
+2.安装
+
+进入[sqlite官网下载](https://www.sqlite.org/download.html)源码压缩档，sqlite-autoconf-3320200.tar.gz
+
+![1592271367049](/home/ubuntu/.config/Typora/typora-user-images/1592271367049.png)
+
+解压压缩档`$tar xvzf sqlite-autoconf-3320200.tar.gz`进入到解压后的根目录，执行如下命令
+
+```shell
+$ ./configure --prefix=/usr/local
+$ make
+$ make install
+```
+
+安装完再按照第一步查看版本信息
+
+**sqlite基础命令**
+
+sqlite有点命令和分号命令两大类，即.xxx和xxx;两种形式
+
+---------------------------------
+
+点命令
+
+| 命令              | 功能                                           |
+| ----------------- | ---------------------------------------------- |
+| .help             | 列出sqlite帮助信息                             |
+| .databases        | 列出数据库名称及其依附文件                     |
+| .exit .quit       | 这两个都是退出sqlite命令                       |
+| .show             | 显示各种设置的当前值                           |
+| .header(s) ON/OFF | 开启或关闭表头显示                             |
+| .mode MODE        | 设置结果显示模式，通常使用.mode column列左对齐 |
+| .timer ON/OFF     | 开启或关闭CPU定时器                            |
+| .tables           | 列出数据表                                     |
+| .schema table1    | 得到table1的表头创建信息                       |
+| .width 10,20,20   | 设置显示的宽度(第一列10,第二列20,第三列20)     |
+
+分号命令:以数据表名table1为例
+
+| 命令                                                         | 功能                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| create table table1;                                         | 创建一个名为table1的数据表，需要携带数据表表头信息           |
+| drop table table1;                                           | 在当前数据库中删除数据表table1                               |
+| drop table database_name.table1;                             | 删除database_name数据库中的数据表table1                      |
+| insert into table1 [(c1,c2,c3,...,cn)] values(v1,v2,v3,...,vn); | 向table1中插入一条数据，其中指定的列c1...cn的值为v1...vn     |
+| insert into table1 values(v1,v2,v3,...,vn);                  | 向table1中插入一条数据，按列的顺序设为v1...vn                |
+| select * from table1                                         | 查询table1的所有数据                                         |
+| select c1,c2..cn from table1                                 | 查询table1的指定列数据                                       |
+| insert into table1 [(c1, c2, ... cn)] select c1, c2, ...cn  from table2 [where conditon]; | 将table2中符合条件的数据插入到table1中，where condition可选，contion条件根据后面介绍的运算符自由设计(可参考Mysql) |
+| update table1 set c1=v1,c2=v2,.. where [condition];          | 修改数据表已有的数据                                         |
+| delete from table1 where [condition];                        | 删除数据表已有的数据                                         |
+将table1中id为6的数据行中的adress项修改为texas
+```
+sqlite> UPDATE table1 SET ADDRESS = 'Texas' WHERE ID = 6;
+```
+
+删除table1中id为6的数据行
+
+```
+sqlite> delete table1 WHERE ID = 6;
+```
+
+创建数据库
+
+```
+$ sqlite3 database_name.db
+```
+
+创建数据表
+
+```
+sqlite> create table table1(
+    ID INT PRIMARY KEY NOT NULL,
+    NAME TEXT NOT NULL,
+    AGE INT NOT NULL,
+    ADDRESS CHAR(20),
+    SALARY REAL);
+```
+运算符
+
+| 运算符      | 功能                         |
+| ----------- | ---------------------------- |
+| +           | 加法                         |
+| -           | 减法                         |
+| *           | 乘法                         |
+| /           | 除法                         |
+| %           | 取余                         |
+| ==(=)       | 相等为真                     |
+| !=(<>)      | 不等为真                     |
+| < (<=)(!>)  | 小于(小于等于)(小于等于)为真 |
+| \> (>=)(!<) | 大于(大于等于)(大于等于)为真 |
+
