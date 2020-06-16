@@ -317,3 +317,65 @@ statupass=1
 Table created successfully
 ```
 
+## Django操作sqlite
+
+**创建数据库**
+
+打开项目子文件下的setting.py，修改DATABASES项目中的'default'键对应的字典，为项目设置数据库名，当然也可以不修改．(如果使用Mysql数据库也是修改这里！)
+
+**创建数据表**
+
+打开应用下的models.py文件，在models.py中创建我们自己的数据类，如下创建了一个History类
+
+```python
+from django.db import models
+
+class History(models.Model):
+    time = models.CharField(max_length=20)
+    classify = models.IntegerField()
+    product = models.CharField(max_length=10)
+    station = models.CharField(max_length=10)
+```
+
+修改了models.py后需要执行下面两条指令
+
+```shell
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+```
+
+这样在我们的数据库中就生成了一个app_history数据表,这里注意,django会自动为我们的数据表添加上索引主键,我们在后台插入数据到数据表时第一个值(索引)不能确实,可以传NULL.
+
+**查询数据表**
+
+django有一个默认管理器对象objects,可以帮我们完成各种查询操作.通过objects的一些api操作可以得到查询到的queryset()对象.
+
+Django常用查询API
+
+```txt
+<1>filter(**kwargs): 它包含了与所给筛选条件相匹配的对象
+<2>all():            查询所有结果
+<3>get(**kwargs):    返回与所给筛选条件相匹配的对象，返回结果有且只有一个，如果符合筛选条件的对象超过一个或者没有都会抛出错误。
+#-----------下面的方法都是对查询的结果再进行处理:比如 objects.filter.values()--------
+<4>values(*field):   返回一个ValueQuerySet——一个特殊的QuerySet，运行后得到的并不是一系列 model的实例化对象，而是一个可迭代的字典序列                                 
+<5>exclude(**kwargs):它包含了与所给筛选条件不匹配的对象
+<6>order_by(*field): 对查询结果排序
+<7>reverse(): 对查询结果反向排序
+<8>distinct(): 从返回结果中剔除重复纪录
+<9>values_list(*field):它与values()非常相似，它返回的是一个元组序列，values返回的是一个字典序列
+<10>count():返回数据库中匹配查询(QuerySet)的对象数量。
+<11>first(): 返回第一条记录
+<12>last(): 返回最后一条记录
+<13>exists(): 如果QuerySet包含数据，就返回True，否则返回False。
+```
+
+如下代码获取最新的数据并显示内容
+
+```python
+sqlobject = models.History.objects.last()
+print("time: ", sqlobject.time)
+print("classify: ", sqlobject.classify)
+print("product: ", sqlobject.product)
+print("station: ", sqlobject.station)
+```
+
