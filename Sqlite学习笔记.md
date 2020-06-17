@@ -379,3 +379,46 @@ print("product: ", sqlobject.product)
 print("station: ", sqlobject.station)
 ```
 
+前面所提到的QuerySet对象其实就是数据库中的每一条数据,我们同样可以使用django的方式来增删改查,查询的方式在上面已经介绍,下面再来介绍增删改的方法:
+
+**增加数据**
+
+```python
+# 方法1
+models.History.objects.create(time="xx", classify=xx, product="xx", station="xx")
+# 方法2
+obj = models.History(time="xx", classify=xx, product="xx", station="xx")
+obj.save()
+# 方法3
+dic = {"time"="xx", "classify"=xx, "product"="xx", "station"="xx"}
+models.History.objects.create(**dic)
+# 方法4
+obj = models.History()
+obj.time="xx"
+obj.classify=xx
+obj.product="xx"
+obj.station="xx"
+obj.save()
+# 方法5
+models.History.objects.get_or_create(time="xx", classify=xx, product="xx", station="xx")
+```
+
+**删除数据**(直接调用queryset对象的delete方法即可)
+
+```python
+models.History.objects.filter(time="xx").delete()
+```
+**修改数据**(直接调用queryset对象的update方法即可)
+
+```python
+models.History.objects.filter(time="xx").update(classify=xx)
+```
+
+或者
+
+```
+obj = models.History.objects.get(time="xx")
+obj.classify = xx
+obj.save()
+```
+
