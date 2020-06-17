@@ -72,7 +72,10 @@ sqlite有点命令和分号命令两大类，即.xxx和xxx;两种形式
 | insert into table1 [(c1, c2, ... cn)] select c1, c2, ...cn  from table2 [where conditon]; | 将table2中符合条件的数据插入到table1中，where condition可选，contion条件根据后面介绍的运算符自由设计(可参考Mysql) |
 | update table1 set c1=v1,c2=v2,.. where [condition];          | 修改数据表已有的数据                                         |
 | delete from table1 where [condition];                        | 删除数据表已有的数据                                         |
+
+
 将table1中id为6的数据行中的adress项修改为texas
+
 ```
 sqlite> UPDATE table1 SET ADDRESS = 'Texas' WHERE ID = 6;
 ```
