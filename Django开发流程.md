@@ -64,6 +64,8 @@ if __name__ == '__main__':
 
 ```shell
 $ django-admin.py startproject learn
+# 或者
+$ django-admin startproject learn
 ```
 
 会在当前目录下生成文件夹learn(learn文件夹下包含一个learn文件夹和manage.py文件)
