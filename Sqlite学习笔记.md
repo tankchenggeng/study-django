@@ -82,8 +82,8 @@ sqlite> UPDATE table1 SET ADDRESS = 'Texas' WHERE ID = 6;
 
 删除table1中id为6的数据行
 
-```
-sqlite> delete table1 WHERE ID = 6;
+```shell
+sqlite> delete from table1 WHERE ID = 6;
 ```
 
 创建数据库
