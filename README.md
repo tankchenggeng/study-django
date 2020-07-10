@@ -73,3 +73,32 @@ Quit the server with CONTROL-C.
 ```
 
 打开浏览器输入http://127.0.0.1:8000/,可以看到django.即表示项目搭建成功.
+
+### 多应用开发
+
+删除应用文件夹materialsystem下的test.py,新建urls.py,添加如下内容:
+
+```python
+from django.urls import path
+from django.contrib import admin
+ 
+app_name = 'materialsystem'
+ 
+urlpatterns = [
+    path('admin', admin.site.urls),
+]
+```
+
+项目涉及到多应用，所以需要使用到路由分发，用户使用materialsystem应用，所以我们在项目下url设置路由分发，将用户登录的url分发到materialsystem应用下,在项目配置文件夹下的urls.py添加应用的urls.
+
+```python
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('materialsystem/', include('materialsystem.urls')),
+]
+```
+

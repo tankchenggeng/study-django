@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>Register</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="" rel="stylesheet">
+</head>
+<body>
+<div style="text-align: center;">
+    <form action="/materialsystem/register/" method="post">
+        {% csrf_token %} <!-- 跨域请求，-->
+        <div class="form-group">
+            <label>用户名:</label>
+            {{ userform.username }}
+        </div>
+        <div class="form-group">
+            <label>密码：</label>
+            <input type="password" name='password' class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>验证密码：</label>
+            <input type="password" name='repassword' class="form-control" required>
+        </div>
+        <input type="submit" name="提交", value="注册">
+        <a href="/materialsystem/login/" ><ins>用户登录</ins></a>
+    </form>
+    {% if message %}
+    <div class="alert alert-warning">{{ message }}</div>
+     {% endif %}
+</div>
+</body>
+</html>
+
