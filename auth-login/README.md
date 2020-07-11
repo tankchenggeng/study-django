@@ -33,7 +33,7 @@ TEMPLATES = [
 
 对于应用issuesystem的专用模板文件,在templates下新建一个issuesystem文件夹
 
-**2. 添加app**
+**2. 添加app并设置未登录跳转**
 
 打开项目配置文件夹aisystem下的setting.py,添加issuesystem:
 ```python
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # 在最后添加
     'issuesystem',
 ]
+
+LOGIN_URL = '/login/'  # 配置未登录访问需登录界面的跳转
 ```
 
 **3. 设置路由分发和视图**
@@ -118,7 +120,8 @@ def logout(request):
     return redirect('../login/')
 ```
 auth.authenticate(username=username, password=password)验证成功时返回user,否则返回None
-auth.login(request, user)将user信息注册到session中,登录成功后,就可以访问被login_required装饰的index视图
+auth.login(request, user)将user信息注册到session中,登录成功后,就可以访问被login_required装饰的index视图,如果未登录,网页则会重定向到settings.py中设置的LOGIN_URL配置的网页
+`LOGIN_URL = '/login/'  # 配置未登录访问需登录界面的跳转`
 User.objects.create_user(username=username, password=password)创建的是密文密码,
 User.objects.create(username=username, password=password)创建的是明文密码,User模x型支持明文密文两种方式共存.
 auth.logout(request)登出,会将session中的user信息删除.
@@ -182,6 +185,7 @@ index.html
 主页提供了进入应用的入口
 
 **5. 应用配置**
+
 打开issuesystem应用目录,删除test.py,增加urls.py
 urls.py添加以下代码:
 ```python
