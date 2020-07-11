@@ -1,21 +1,26 @@
 ## 用户注册登录(明文密码)
 以最基本的注册登录进入网页为例
+
 需要3个模板文件:
 1. 登录界面login.html
 2. 注册界面register.html
 3. 主页index.html
+
 需要4个视图函数, 同时对应4个路由:
 1. login(request)登录视图
 2. register(request)注册视图
 3. index(request)主页视图
 4. logout(request)登出视图
+
 一个数据库模型:用户账号密码
 1. User
+
 一个模型表单:用户账号密码
 1. UserForm(模型表单并非必要,不过使用模型表单更方便)
 
 ### 详解
 **models.py**
+
 打开应用下的models.py,添加以下代码:
 ```python
 from django.db import models
@@ -27,6 +32,7 @@ class User(models.Model):
 ```
 
 **forms.py**
+
 打开应用下的forms.py,添加以下代码:
 ```python
 from django import forms
@@ -46,6 +52,7 @@ $ python3 manage.py migrate
 ```
 
 **urls.py**
+
 打开应用下的urls.py,添加以下代码:
 ```python
 from django.contrib import admin
@@ -64,6 +71,7 @@ urlpatterns = [
 ```
 
 **views.py**
+
 打开应用下的views.py,添加以下代码:
 ```python
 # encoding=utf-8
