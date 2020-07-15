@@ -1,0 +1,40 @@
+{% extends "issuesystem/base.html" %}
+  {% block title %}Issue{% endblock %}
+  {% block content %}
+  {% load highlight %}
+  <div class="row">
+    <div class="col-xl-10">
+      <div style="text-align: center;">
+        <form method="get" action="/search/">
+          {% csrf_token %}
+          <div class="form-group" style="display: inline;">
+            <input type="text" name="q" class="form-control fl" placeholder="{{ query }}" required>
+            <input type="submit" name="提交", class="fr" value="搜索">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-12 col-xl-12">
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table align-items-center">
+            <tbody>
+              {% for item in page %}
+              <tr>
+                <td><a href="/issuesystem/showissue/{{ item.object.id }}">{% highlight item.object.title with query ellipsis 'false' %}</a>
+                <!-- <td><a href="/issuesystem/showissue/{{ item.object.id }}">{{item.object.title}}</a> -->
+                  <!-- <p>{{item.object.description}}</p> -->
+                  <p>{% highlight item.object.description with query max_length 160 %}</p>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
