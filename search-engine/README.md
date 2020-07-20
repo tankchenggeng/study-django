@@ -1,7 +1,8 @@
 ## 关键词搜索
 
 ### 安装django搜索引擎依赖
-========================
+------
+
 **1. jieba中文分词**
 
 安装分词框架
@@ -312,6 +313,7 @@ self.query_words = set([word.lower() for word in words if len(word)>1])
 ```
 
 **4. 定义省略号开始的位置和结束位置**
+
 打开highlighting.py,找到find_window()函数
 ```python
 # 原代码
