@@ -225,7 +225,7 @@ function addImage() {
 第11点我们上传图片前可以预览，但是如果我们重新选取照片时，前端预览界面虽然显示了所有选中的照片，但实际上传的图片只有最后一次选中的图片．这种数据不对应自然不是我们希望看到的．
 第一步：修改11点中的js代码
 ```javascript
-var uploadimages = [];  # 增加
+var uploadimages = [];  // 增加
 function addImage() {
   var files = $('.add-image').prop("files");
   var listimage = document.getElementById("list-image");
@@ -239,7 +239,7 @@ function addImage() {
       listimage.appendChild(image);
     }, false);
     reader.readAsDataURL(file);
-    uploadimages.push(file);  # 增加
+    uploadimages.push(file);  // 增加
   }
   if (files) {
     [].forEach.call(files, readAndPreview);
